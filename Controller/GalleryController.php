@@ -3,7 +3,6 @@
 require_once "./Model/Model.php";
 require_once "./View/View.php";
 require_once "./CardAlgorithm.php";
-require_once './dompdf/autoload.inc.php';
 
 class GalleryController
 {
@@ -178,12 +177,19 @@ class GalleryController
                 for ($j = 0; $j < 9; $j++) {
                     //si en esa columna, en las 3 filas hay 3 nulls o 3 numeros
                     //osea, columna solo de numeros o solo de null (PROHIBIDAS)
-                    if (($matrix[1][$j] == null && $matrix[2][$j] == null && $matrix[0][$j] == null) || ($matrix[1][$j] != null && $matrix[2][$j] != null && $matrix[0][$j] != null)) {
+                    if (($matrix[1][$j] == null && $matrix[2][$j] == null && $matrix[0][$j] == null)) {
                         //entonces tiro el for de vuelta a 0 y creo otro carton para comprobarlo
-                        $j = 0;
+                        $j = -1;
+                        $matrix = $algorithm->createCard();
+                        //si solo hay columnas de numeros
+                    } else if (($matrix[1][$j] != null && $matrix[2][$j] != null && $matrix[0][$j] != null)) {
+                        $j = -1;
+                        $matrix = $algorithm->createCard();
+                        //si hay numeros repetidos y son distintos de null
+                    } else if ((($matrix[1][$j] == $matrix[2][$j]) && ($matrix[1][$j] != null)) || (($matrix[1][$j] == $matrix[0][$j])  && ($matrix[1][$j] != null)) || (($matrix[0][$j] == $matrix[2][$j])  && ($matrix[0][$j] != null))) {
+                        $j = -1;
                         $matrix = $algorithm->createCard();
                     } else {
-                        //si llego al final sin entrar al if, corto el while porque ese carton messirve (?
                         if ($j == 8) {
                             $flag = false;
                         }

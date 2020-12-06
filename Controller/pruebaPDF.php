@@ -1,17 +1,6 @@
 <?php
 
-require_once '../dompdf/autoload.inc.php';
-require_once "../libs/smarty/Smarty.class.php";
 require_once "../Model/Model.php";
-
-use Dompdf\Dompdf;
-
-// $smarty = new Smarty();
-// $html = $smarty->fetch('../templates/template.tpl');
-$html = '../prueba.html';
-$filename = '../pdf/file.pdf';
-
-$dompdf = new Dompdf();
 
 
 $html = '
@@ -41,7 +30,6 @@ $cards = $model->GetBingoCards();
 
 foreach ($cards as $card) {
 
-
     $i = 0;
     $matrix = [];
     $table_id = $card->id;
@@ -57,7 +45,7 @@ foreach ($cards as $card) {
     foreach ($matrix as $row) {
 
         $html .= '
-    <div>' . '<h1>' . $table_id . '</h1>'. '
+    <div>
   <tr>
    <td>' . $row[0] . '</td>
    <td>' . $row[1] . '</td>
@@ -72,21 +60,7 @@ foreach ($cards as $card) {
   </div>
  ';
     }
-
-    $html .= '<br>';
 }
 $html .= '</table>';
 
-echo ($html);
-die();
 
-
-
-
-
-$dompdf->set_paper('A4', 'portrait');
-$dompdf->render();
-$dompdf->stream("PruebaTabla", array("Attachment" => 0));
-// file_put_contents($filename, $dompdf->output());
-
-die();
